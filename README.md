@@ -32,11 +32,10 @@ export GCP_PROJECT={your_GCP_project_name_or_some_dummy_value}
 ## Usage
 
 If you have set up the installation for `gpt2`, for example:
-If you have set up the installation for `gpt2`, for example:
 
 - Build the docker image `make build-dev APP=gpt2`
-- Run the container `make run APP=gpt2`
-- Send an inference request via curl `make test APP=gpt2`
+- Run the container `make run APP=gpt2` and wait a minute or so for the workers to load 
+- Send an inference request via curl `make test APP=gpt2` (be patient :D - inference can take minutes on CPU, especially for the dolly models)
 - `make help`: see all available targets
 
 # Serving LLMs with torchserve and Vertex AI: Part I
