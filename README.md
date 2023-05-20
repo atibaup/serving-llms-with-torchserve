@@ -40,7 +40,7 @@ If you have set up the installation for `gpt2`, for example:
 
 # Serving LLMs with torchserve and Vertex AI: Part I
 
-Deploying large Machine Learning models (Language or not) is here to stay and 
+The need for deploying large Machine Learning models (Language or not) is here to stay and 
 their characteristics (massive memory and computational needs) make their 
 deployment a bit trickier.
 
@@ -51,7 +51,7 @@ all the necessary artifacts into one (more-or-less) portable component that
 can be deployed locally, directly on a stand-alone cloud instance or through a 
 managed ML deployment service such as AWS's Sagemaker or GCP's Vertex AI.
 
-This blog post is the first of two posts on how to deploy open-source Language Models
+This post is the first of two posts on how to deploy open-source Language Models
 in Vertex AI (though many of the tips and the process itself is very similar for other similar
 cloud services). In this first post I will talk about packaging PyTorch LLM models using HuggingFace 
 transformers into a TorchServe docker container. In particular I will provide an example
@@ -81,7 +81,7 @@ and the Dockerfile if you want to delve into the nitty gritty.
 
 ## Packing things tight
 
-Now that we can run inference on our model via torchserve, we want to pack 
+Now that we know how to run inference on our model via torchserve, we want to pack 
 everything in a docker container, to be deployed as a containerized application
 according to our fancy deployment preferences (as a K8S pod, in a single instance, through a managed
 ML service, whatever)
