@@ -41,9 +41,13 @@ If you have set up the installation for `gpt2`, for example:
 ```
 curl -d '{"instances": ["How to prepare a spanish omelette:"]}' \
                 -H "Content-Type: application/json" \
-                -X POST http://localhost:7080/predictions/gpt2 
+                -X POST http://localhost:7080/predictions/gpt2 | json_pp
                 
-{"predictions": ["How to prepare a spanish omelette:\n\n1. Prepare a spanish omelette with a spanish cheesecloth.\n\n2. Place the spanish omelette in a large bowl.\n\n3. Add the spanish cheesecloth to the bowl.\n\n4. Cover the bowl with a lid.\n\n5. Place the lid on the spanish omelette.\n\n6. Place the lid on the spanish omelette.\n\n7. Place the lid on the spanish omelette.\n\n8. Place the lid on the spanish omelette.\n\n9. Place the lid on the spanish omelette.\n\n10. Place the lid on the spanish omelette.\n\n11. Place the lid on the spanish omelette.\n\n12. Place the lid on the spanish omelette.\n\n13. Place the lid on the spanish omelette.\n\n14. Place the lid on the spanish omelette.\n\n15. Place the lid on the spanish omelette.\n\n16. Place the lid on the spanish omelette.\n\n17. Place the lid on the spanish omelette.\n\n"]}
+{
+   "predictions" : [
+      "How to prepare a spanish omelette:\n\n1. Prepare a spanish omelette with a spanish cheesecloth.\n\n2. Place the spanish omelette in a large bowl.\n\n3. Add the spanish cheesecloth to the bowl.\n\n4. Cover the bowl with a lid.\n\n5. Place the lid on the spanish omelette.\n\n6. Place the lid on the spanish omelette.\n\n7. Place the lid on the spanish omelette.\n\n8. Place the lid on the spanish omelette.\n\n9. Place the lid on the spanish omelette.\n\n10. Place the lid on the spanish omelette.\n\n11. Place the lid on the spanish omelette.\n\n12. Place the lid on the spanish omelette.\n\n13. Place the lid on the spanish omelette.\n\n14. Place the lid on the spanish omelette.\n\n15. Place the lid on the spanish omelette.\n\n16. Place the lid on the spanish omelette.\n\n17. Place the lid on the spanish omelette.\n\n"
+   ]
+}
 ```
 
 
