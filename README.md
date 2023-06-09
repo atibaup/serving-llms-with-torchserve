@@ -38,9 +38,22 @@ If you have set up the installation for `gpt2`, for example:
 - Send an inference request via curl `make test APP=gpt2` (be patient :D - inference can take minutes on CPU, especially for the dolly models)
 - `make help`: see all available targets
 
+```
+curl -d '{"instances": ["How to prepare a spanish omelette:"]}' \
+                -H "Content-Type: application/json" \
+                -X POST http://localhost:7080/predictions/gpt2 | json_pp
+                
+{
+   "predictions" : [
+      "How to prepare a spanish omelette:\n\n1. Prepare a spanish omelette with a spanish cheesecloth.\n\n2. Place the spanish omelette in a large bowl.\n\n3. Add the spanish cheesecloth to the bowl.\n\n4. Cover the bowl with a lid.\n\n5. Place the lid on the spanish omelette.\n\n6. Place the lid on the spanish omelette.\n\n7. Place the lid on the spanish omelette.\n\n8. Place the lid on the spanish omelette.\n\n9. Place the lid on the spanish omelette.\n\n10. Place the lid on the spanish omelette.\n\n11. Place the lid on the spanish omelette.\n\n12. Place the lid on the spanish omelette.\n\n13. Place the lid on the spanish omelette.\n\n14. Place the lid on the spanish omelette.\n\n15. Place the lid on the spanish omelette.\n\n16. Place the lid on the spanish omelette.\n\n17. Place the lid on the spanish omelette.\n\n"
+   ]
+}
+```
+
+
 # Serving LLMs with torchserve and Vertex AI: Part I
 
-Deploying large Machine Learning models (Language or not) is here to stay and 
+The need for deploying large Machine Learning models (Language or not) is here to stay and 
 their characteristics (massive memory and computational needs) make their 
 deployment a bit trickier.
 
@@ -51,7 +64,7 @@ all the necessary artifacts into one (more-or-less) portable component that
 can be deployed locally, directly on a stand-alone cloud instance or through a 
 managed ML deployment service such as AWS's Sagemaker or GCP's Vertex AI.
 
-This blog post is the first of two posts on how to deploy open-source Language Models
+This post is the first of two posts on how to deploy open-source Language Models
 in Vertex AI (though many of the tips and the process itself is very similar for other similar
 cloud services). In this first post I will talk about packaging PyTorch LLM models using HuggingFace 
 transformers into a TorchServe docker container. In particular I will provide an example
@@ -81,7 +94,7 @@ and the Dockerfile if you want to delve into the nitty gritty.
 
 ## Packing things tight
 
-Now that we can run inference on our model via torchserve, we want to pack 
+Now that we know how to run inference on our model via torchserve, we want to pack 
 everything in a docker container, to be deployed as a containerized application
 according to our fancy deployment preferences (as a K8S pod, in a single instance, through a managed
 ML service, whatever)
