@@ -1,0 +1,10 @@
+deployment:
+  machine_type: 'n1-standard-8'
+  min_replica_count: 1
+  max_replica_count: 1
+  accelerator_type: 'NVIDIA_TESLA_T4'
+  accelerator_count: 1
+
+aiplatform:
+  gcp_staging_bucket: 'gs://sylvan-epoch-389310-vertexai-staging'
+  sa_credentials: '/Users/atibaup/Documents/landbot/credentials/sylvan-epoch-389310-7cd30ec565e6.json'
