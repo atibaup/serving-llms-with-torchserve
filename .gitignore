@@ -1,2 +1,4 @@
 offload/
 .idea
+infra/.terraform*
+infra/terraform.tfstate*

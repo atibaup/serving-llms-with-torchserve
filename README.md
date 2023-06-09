@@ -130,3 +130,10 @@ I'm quite new to Torch so not sure if there's anyway to slim down the base insta
 of torchserve](https://github.com/pytorch/serve/blob/master/requirements/torch_cu102_linux.txt) so not clear that this can be
 done.
 
+NOTES
+
+you may need to create a default metadata store for your project:
+curl -X POST \
+    -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+    -H "Content-Type: application/json; charset=utf-8" \
+    "https://europe-west4-aiplatform.googleapis.com/v1/projects/coherent-racer-379715/locations/europe-west4/metadataStores?metadata_store_id=default"
