@@ -30,14 +30,6 @@ test-dev: ## tests that local model endpoint is running
 		-H "Content-Type: application/json" \
 		-X POST http://localhost:7080/predictions/$(APP)
 
-test: ## tests that vertexai model endpoint is running, needs ENDPOINT_ID
-	curl \
-        -X POST \
-        -H "Authorization: Bearer $$(gcloud auth print-access-token)" \
-        -H "Content-Type: application/json" \
-        https://europe-west4-aiplatform.googleapis.com/v1/projects/$(GCP_PROJECT)/locations/europe-west4/endpoints/$(ENDPOINT_ID):predict \
-        -d '{"instances":["How to prepare a spanish omelette:"]}'
-
 shell: ## run interactive shell within local container
 	docker exec --interactive --tty $(APP) /bin/bash
 
@@ -49,6 +41,15 @@ push: ## push container to GCR registry
 
 deploy: ## Deploy to vertexai. Requires providing APP and VERSION
 	python deploy_to_vertexai.py $(APP) $(VERSION) $(APP)-gpu
+
+test: ## tests that vertexai model endpoint is running, needs ENDPOINT_ID
+	curl \
+        -X POST \
+        -H "Authorization: Bearer $$(gcloud auth print-access-token)" \
+        -H "Content-Type: application/json" \
+        https://europe-west4-aiplatform.googleapis.com/v1/projects/$(GCP_PROJECT)/locations/europe-west4/endpoints/$(ENDPOINT_ID):predict \
+        -d '{"instances":["How to prepare a spanish omelette:"]}'
+
 
 .DEFAULT_GOAL := help
 .PHONY: help

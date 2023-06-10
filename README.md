@@ -4,6 +4,8 @@
 
 [Local usage](#local-usage)
 
+[Vertex AI - Google Cloud Platform setup](#vertex-ai---google-cloud-platform-setup)
+
 [Serving LLMs with torchserve and Vertex AI: Part I](#serving-llms-with-torchserve-and-vertex-ai-part-i)
 
 [Serving LLMs with torchserve and Vertex AI: Part II](#serving-llms-with-torchserve-and-vertex-ai-part-ii)
@@ -105,12 +107,29 @@ make push APP=gpt2
 **WARNING-2**: This **CAN BE EXPENSIVE** since it will deploy a model on the (possibly expensive) infrastructure specified in `config.yml`. Make sure you
 delete the endpoint once you're done testing to avoid unexpected charges.
 ```
-make deploy APP=gpt2 VERSION=1
+> make deploy APP=gpt2 VERSION=1
 
+Creating Tensorboard
+Create Tensorboard backing LRO: projects/343242343/locations/europe-west4/tensorboards/343242343/operations/343242343
+Tensorboard created. Resource name: projects/343242343/locations/europe-west4/tensorboards/343242343
+To use this Tensorboard in another session:
+tb = aiplatform.Tensorboard('projects/343242343/locations/europe-west4/tensorboards/343242343')
+Creating Model
+Create Model backing LRO: projects/343242343/locations/europe-west4/models/343242343/operations/5429220742434652160
+Model created. Resource name: projects/343242343/locations/europe-west4/models/343242343@1
+To use this Model in another session:
+model = aiplatform.Model('projects/343242343/locations/europe-west4/models/343242343@1')
+Creating gpt2-v1 model...
+Model created:
+- model.display_name: gpt2-v1
+- model.resource_name:projects/343242343/locations/europe-west4/models/343242343
+Creating Endpoint
+Create Endpoint backing LRO: projects/343242343/locations/europe-west4/endpoints/5360365476012621824/operations/8955539250665750528
+...
 ```
-7. Test the endpoint:
+7. Test the endpoint, you will need the ENDPOINT_ID output after running the deplpoy command above
 ```
-make test APP=gpt2
+make test APP=gpt2 ENDPOINT_ID=...
 ```
 8. Destroy the infrastructure to avoid unexpected charges: `cd infra & terraform destroy`
 
@@ -174,8 +193,45 @@ within the Dockerfile.
 
 # Serving LLMs with torchserve and Vertex AI: Part II
 
+You have been experimenting with GPT-3/4 using OpenAI's API and your prompt-engineering
+skills and you have a validated PoC that you now need to scale... However, if you're honest
+to yourself (and your users) you realize that:
+- your LLM performance is good but you need to be better for General Availability (both in terms
+of accuracy and latency)
+- your openAI API costs are going to make a dent on your gross margin
 
+Congratulations, you're off to the next stage in MLOps. Most likely, you will need to:
 
+1. Fine-tune & quantizing a (possibly smaller) model to adapt it to your domain while improving accuracy and reducing computational needs
+2. Deploy this custom model on an infrastructure that can scale to your traffic requirements
+
+In this second part of this series I finish discussing how to deploy a (possibly customized)
+LLM model in PyTorch. In the first post we saw how to package the model in a container
+running `torchserve`. Now it's time to deploy this container in scalable infrastructure.
+
+VertexAI is a Google Cloud managed service for doing just that (very similar to the model
+pioneered with AWS with Sagemaker). VertexAI usage is quite straightforward and will allow us
+to delegate some production-readiness concerns to Google Cloud's managed infra:
+- networking
+- load balancing, (auto)scaling and recovery
+- logging, alerting
+
+This of course comes at an additional operational cost relative to managing and provisioning underlying
+infrastructure on your own, but with a lot faster time-to-market.
+
+All we need to do is (see [for the details](#vertex-ai---google-cloud-platform-setup)):
+
+1. Provision a Google project with some basic infrastructure: a service account with adequate role bindings,
+a google storage bucket and a default metastore.
+2. Push our model container into the project registry
+3. Use vertexai (sometimes cryptic) SDK to create a model and deploy it to an endpoint
+
+In [this post's companion repo](https://github.com/atibaup/serving-llms-with-torchserve), we show how to do (1) with a simple terraform plan. Take into account though
+that **this infrastructure is just for illustration purposes, and that production-grade
+infrastructure should be designed by a cloud infra expert (which I'm not!).**
+
+Knowing how to deploy custom models to scale, we just have one barrier left to scaling our
+LLM-based application: fine-tuning and quantizing an LLM, which we'll see in a different post.
 
 ## FAQs:
 
