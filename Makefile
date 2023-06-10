@@ -4,7 +4,7 @@ GPU_IMAGE_NAME := $(IMAGE_NAME)-gpu
 
 .PHONY: build-dev build-pro run stop test shell logs push
 
-build-dev: ## builds CPU-optimized docker image
+build-dev: ## builds CPU-optimized docker image for local dev
 	docker build -t $(CPU_IMAGE_NAME) \
 	--build-arg ARCH=cpu --build-arg MODEL_PATH=$(PWD) \
 	--build-arg MODEL_NAME=$(APP) --progress=plain .

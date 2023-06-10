@@ -4,6 +4,7 @@ deployment:
   max_replica_count: 1
   accelerator_type: 'NVIDIA_TESLA_T4'
   accelerator_count: 1
+  traffic_percentage: 100
 
 aiplatform:
   gcp_staging_bucket: 'gs://sylvan-epoch-389310-vertexai-staging'

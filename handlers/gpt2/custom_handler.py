@@ -15,7 +15,7 @@ class GPT2GenerationHandler(BaseHandler):
     """
 
     def __init__(self, do_sample: bool = True, max_new_tokens: int = 256, top_p: float = 0.92, top_k: int = 0):
-        super(GPT2GenerationHandler, self).__init__()
+        super().__init__()
         self.do_sample = do_sample
         self.max_new_tokens = max_new_tokens
         self.top_p = top_p
@@ -45,7 +45,7 @@ class GPT2GenerationHandler(BaseHandler):
             offload_state_dict=True
         )
         self.model.eval()
-        logger.debug('GPT2 model from path {0} loaded successfully'.format(model_dir))
+        logger.debug('GPT2 model from path {} loaded successfully'.format(model_dir))
 
         self.initialized = True
 

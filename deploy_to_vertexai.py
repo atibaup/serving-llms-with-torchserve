@@ -1,14 +1,15 @@
+import os
+from collections import namedtuple
+from typing import Tuple
+
 from google.cloud import aiplatform
 from google.oauth2 import service_account
 import yaml
-import os
-from collections import namedtuple
-
 
 DeploymentConfig = namedtuple(
     "DeploymentConfig",
     ["machine_type", "min_replica_count", "max_replica_count",
-     "accelerator_type","accelerator_count", "service_account"]
+     "accelerator_type", "accelerator_count", "service_account"]
 )
 
 AiPlatformConfig = namedtuple(
@@ -21,7 +22,7 @@ GCP_PROJECT = os.environ['GCP_PROJECT']
 GCP_REGION = os.environ['GCP_REGION']
 
 
-def create_vertexai_model(model_name, container_image_uri, **kwargs):
+def create_vertexai_model(model_name: str, container_image_uri: str, **kwargs) -> aiplatform.Model:
     health_route = "/ping"
     predict_route = f"/predictions/{model_name}"
     serving_container_ports = [7080]
@@ -40,14 +41,14 @@ def create_vertexai_model(model_name, container_image_uri, **kwargs):
             serving_container_ports=serving_container_ports,
             **kwargs
         )
+        print(f"Creating {model_name} model...")
 
-    print("waiting for model creation...")
     model.wait()
-    print("Model created.")
+    print(f"Model created:\n- model.display_name: {model.display_name}\n- model.resource_name:{model.resource_name}")
     return model
 
 
-def deploy_model_to_endpoint(model, deployment_config: DeploymentConfig):
+def deploy_model_to_endpoint(model: aiplatform.Model, deployment_config: DeploymentConfig) -> Tuple[aiplatform.Endpoint, aiplatform.Model]:
     deployed_model_display_name = model.display_name
     endpoint_display_name = f"{deployed_model_display_name}-endpoint"
 
@@ -63,22 +64,17 @@ def deploy_model_to_endpoint(model, deployment_config: DeploymentConfig):
     model.deploy(
         endpoint=endpoint,
         deployed_model_display_name=deployed_model_display_name,
-        machine_type=deployment_config.machine_type,
-        min_replica_count=deployment_config.min_replica_count,
-        max_replica_count=deployment_config.max_replica_count,
-        accelerator_type=deployment_config.accelerator_type,
-        accelerator_count=deployment_config.accelerator_count,
-        traffic_percentage=100,
         sync=True,
+        **deployment_config._asdict(),
     )
 
-    print("waiting for model deployment...")
+    print("Waiting for model deployment...")
     model.wait()
-    print(f"Model deployed at: {str(endpoint)}")
+    print(f"Model deployed at: {endpoint.name}")
     return endpoint, model
 
 
-def load_config(path: str) :
+def load_config(path: str) -> Tuple[DeploymentConfig, AiPlatformConfig]:
     with open(path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     deployment_config = DeploymentConfig(**config['deployment'])
@@ -111,6 +107,4 @@ if __name__ == '__main__':
     model_name = f"{args.app}-v{args.version}"
     container_image_uri = f"gcr.io/{GCP_PROJECT}/{args.container_image_name}"
     model = create_vertexai_model(model_name, container_image_uri)
-    print(f"model.display_name: {model.display_name}\nmodel.resource_name:{model.resource_name}")
-
     deploy_model_to_endpoint(model, deployment_config)
