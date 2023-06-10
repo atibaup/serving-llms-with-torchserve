@@ -195,22 +195,23 @@ within the Dockerfile.
 
 You have been experimenting with GPT-3/4 using OpenAI's API and your prompt-engineering
 skills and you have a validated PoC that you now need to scale... However, if you're honest
-to yourself (and your users) you realize that:
-- your LLM performance is good but you need to be better for General Availability (both in terms
+to yourself (and your users) you know that:
+- your LLM performance is good for a PoC but you need it to be better for General Availability (both in terms
 of accuracy and latency)
-- your openAI API costs are going to make a dent on your gross margin
+- your openAI (or other 3P) API costs are going to make a dent on your gross margin
 
 Congratulations, you're off to the next stage in MLOps. Most likely, you will need to:
 
 1. Fine-tune & quantizing a (possibly smaller) model to adapt it to your domain while improving accuracy and reducing computational needs
 2. Deploy this custom model on an infrastructure that can scale to your traffic requirements
 
-In this second part of this series I finish discussing how to deploy a (possibly customized)
-LLM model in PyTorch. In the first post we saw how to package the model in a container
-running `torchserve`. Now it's time to deploy this container in scalable infrastructure.
+In this second part of this series I finish discussing how to address point (2) and
+deploy a (possibly customized)
+LLM model in PyTorch. In the [first post](#serving-llms-with-torchserve-and-vertex-ai-part-i) we saw how to package the model in a container
+running `torchserve` - now it's time to deploy this container in scalable infrastructure.
 
 VertexAI is a Google Cloud managed service for doing just that (very similar to the model
-pioneered with AWS with Sagemaker). VertexAI usage is quite straightforward and will allow us
+pioneered with AWS with Sagemaker, and other from Azure, MosaicML, etc). VertexAI usage is quite straightforward and will allow us
 to delegate some production-readiness concerns to Google Cloud's managed infra:
 - networking
 - load balancing, (auto)scaling and recovery
@@ -226,8 +227,9 @@ a google storage bucket and a default metastore.
 2. Push our model container into the project registry
 3. Use vertexai (sometimes cryptic) SDK to create a model and deploy it to an endpoint
 
-In [this post's companion repo](https://github.com/atibaup/serving-llms-with-torchserve), we show how to do (1) with a simple terraform plan. Take into account though
-that **this infrastructure is just for illustration purposes, and that production-grade
+In [this post's companion repo](https://github.com/atibaup/serving-llms-with-torchserve),
+we show how to achieve (1) with a simple terraform plan, and (2) with a simple Python script.
+Take into account though that **this infrastructure is just for illustration purposes, and that production-grade
 infrastructure should be designed by a cloud infra expert (which I'm not!).**
 
 Knowing how to deploy custom models to scale, we just have one barrier left to scaling our
