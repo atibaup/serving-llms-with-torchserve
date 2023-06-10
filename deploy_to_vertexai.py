@@ -9,7 +9,7 @@ import yaml
 DeploymentConfig = namedtuple(
     "DeploymentConfig",
     ["machine_type", "min_replica_count", "max_replica_count",
-     "accelerator_type", "accelerator_count", "service_account"]
+     "accelerator_type", "accelerator_count", "service_account", "traffic_percentage"]
 )
 
 AiPlatformConfig = namedtuple(

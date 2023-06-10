@@ -1,11 +1,19 @@
 # Serving LLMs with torchserve and Vertex AI
 
+[Local setup](#local-setup)
 
-## Installation
+[Local usage](#local-usage)
+
+[Serving LLMs with torchserve and Vertex AI: Part I](#serving-llms-with-torchserve-and-vertex-ai-part-i)
+
+[Serving LLMs with torchserve and Vertex AI: Part II](#serving-llms-with-torchserve-and-vertex-ai-part-ii)
+
+
+## Local setup
 
 1. Create a [hugginface](huggingface.co) account and configure your SSH key
-2. install [git lfs](https://git-lfs.com/)
-3. clone your favorite LLM (for now this code has been tested only with dolly-v2-3b and gpt2):
+2. Install [git lfs](https://git-lfs.com/)
+3. Clone your favorite LLM (for now this code has been tested only with dolly-v2-3b and gpt2):
 ```
 git lfs install
 git clone https://huggingface.co/gpt2 # or git@hf.co:databricks/dolly-v2-3b
@@ -13,8 +21,12 @@ cd gpt2
 git lfs pull
 cd ..
 ```
-4. Create a virtual or conda environment and install `python=3.9.16`,  `pytorch=1.12.1`,  `transformers=4.24` and `accelerate=0.18` (may work with other versions, this was tested
-on a Mac M1, running Ventura 13.3.1)
+4. Create a virtual or conda environment and install `python=3.9`,  `pytorch=1.12.1`,  `transformers=4.24`, `accelerate=0.18` and `google-cloud-aiplatform` (may work with other versions, this was tested
+on a Mac M1, running Ventura 13.3.1). Alternatively, you can create a conda environment from the provided `environment.yaml`:
+```
+conda env create -f environment.yml
+conda activate serving-llms
+```
 5. If you are trying to use `dolly-v2-3b`, you will need to hack the accelerate library so
 that it does the weight offloading when running on CPU devices, by changing
 `site-packages/accelerate/big_modeling.py`, line 333:
@@ -24,12 +36,12 @@ that it does the weight offloading when running on CPU devices, by changing
 # Trying this workaround: https://github.com/huggingface/transformers/issues/18698
 main_device = [d for d in device_map.values() if d not in ["disk"]][0]
 ```
-6. set the `GCP_PROJECT` env var (not needed if not deploying to GCP, but you can set it to a dummy variable anyway)
+6. Set the `GCP_PROJECT` env var (not needed if not deploying to GCP, but you can set it to a dummy variable anyway)
 ```
 export GCP_PROJECT={your_GCP_project_name_or_some_dummy_value}
 ```
 
-## Usage
+## Local Usage
 
 If you have set up the installation for `gpt2`, for example:
 
@@ -50,6 +62,57 @@ curl -d '{"instances": ["How to prepare a spanish omelette:"]}' \
 }
 ```
 
+## Vertex AI - Google Cloud Platform setup
+
+1. Create a new Google Cloud Platform project. This will make it easier to create and destroy resources without interfering with other projects you may have,
+but if you really want to you can also use an existing project
+2. Create and set the `GCP_PROJECT` and `GCP_REGION` env vars to your project id, which you can find in the GCP console,
+and your desired region
+```
+export GCP_PROJECT={your_GCP_project_name_or_some_dummy_value}
+```
+3. install the gcloud cli and login `gcloud auth login` to your project's admin account
+4. Configure `infra/terraform.tfvars` to point at the GCP project ID and region that you would like to
+deploy your model to. For example:
+```
+gcp_project_id="sylvan-epoch-2343432"
+gcp_region="europe-west4"
+```
+4. Apply the terraform plan to create all the necessary infrastructure (service account, IAM policies, staging buckets)
+```
+cd infra
+terraform apply
+```
+this will output something like this:
+```
+Apply complete! Resources: 0 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+service_account = "projects/{projectId}/serviceAccounts/vertexai@{projectId}.iam.gserviceaccount.com"
+storage_bucket = "gs://{projectId}-vertexai-staging"
+```
+5. Copy the output of the terraform apply (`service_account` and `storage_bucket`),
+create and download the credentials for the service account key through the GCP console,
+and update the `config.yml` file with the relevant values.
+5. Build and push your model container to the project's registry:
+```
+make build-pro APP=gpt2
+make push APP=gpt2
+```
+6. Deploy model on vertex AI. The script will create a Vertex AI Model and Endpoint, and will deploy the model at the endpoint.
+**WARNING**: This can take several minutes!
+**WARNING-2**: This **CAN BE EXPENSIVE** since it will deploy a model on the (possibly expensive) infrastructure specified in `config.yml`. Make sure you
+delete the endpoint once you're done testing to avoid unexpected charges.
+```
+make deploy APP=gpt2 VERSION=1
+
+```
+7. Test the endpoint:
+```
+make test APP=gpt2
+```
+8. Destroy the infrastructure to avoid unexpected charges: `cd infra & terraform destroy`
 
 # Serving LLMs with torchserve and Vertex AI: Part I
 
@@ -70,7 +133,7 @@ cloud services). In this first post I will talk about packaging PyTorch LLM mode
 transformers into a TorchServe docker container. In particular I will provide an example
 that works for the recent dolly-v2 models from Databricks and the good-old GPT2 model
 (whose 124M parameters make it not that "large" for current standards).
-The next post will be about serving that container via Vertex AI.
+The [next post](#serving-llms-with-torchserve-and-vertex-ai-part-ii) is about serving that container via Vertex AI.
 
 ## torch serving with torchserve
 
@@ -111,7 +174,8 @@ within the Dockerfile.
 
 # Serving LLMs with torchserve and Vertex AI: Part II
 
-WIP
+
+
 
 ## FAQs:
 

@@ -3,119 +3,95 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - abseil-cpp=20211102.0
   - accelerate=0.20.2
-  - aiohttp=3.8.4
-  - aiosignal=1.3.1
-  - arrow-cpp=11.0.0
-  - async-timeout=4.0.2
-  - attrs=23.1.0
-  - aws-c-common=0.4.57
-  - aws-c-event-stream=0.1.6
-  - aws-checksums=0.1.9
-  - aws-sdk-cpp=1.8.185
-  - boost-cpp=1.82.0
-  - brotli=1.0.9
-  - brotli-bin=1.0.9
-  - bzip2=1.0.8
-  - c-ares=1.19.1
+  - blas=1.0
+  - brotlipy=0.7.0
   - ca-certificates=2023.5.7
   - certifi=2023.5.7
   - cffi=1.15.1
+  - cfgv=3.3.1
   - charset-normalizer=2.0.4
-  - click=8.1.3
-  - colorama=0.4.6
-  - dataclasses=0.8
-  - datasets=2.12.0
-  - dill=0.3.6
-  - expat=2.5.0
-  - filelock=3.12.0
-  - frozenlist=1.3.3
-  - fsspec=2023.5.0
+  - cryptography=39.0.1
+  - distlib=0.3.6
+  - filelock=3.9.0
+  - fsspec=2023.4.0
   - future=0.18.3
-  - gdbm=1.18
-  - gflags=2.2.2
-  - glog=0.5.0
-  - grpc-cpp=1.46.1
-  - huggingface_hub=0.15.1
-  - icu=72.1
+  - huggingface_hub=0.14.1
+  - identify=2.5.24
   - idna=3.4
-  - importlib-metadata=6.6.0
-  - importlib_metadata=6.6.0
-  - joblib=1.2.0
-  - krb5=1.19.4
-  - libblas=3.9.0
-  - libbrotlicommon=1.0.9
-  - libbrotlidec=1.0.9
-  - libbrotlienc=1.0.9
-  - libcblas=3.9.0
-  - libcurl=7.88.1
-  - libcxx=16.0.5
-  - libedit=3.1.20221030
-  - libev=4.33
-  - libevent=2.1.10
-  - libexpat=2.5.0
-  - libffi=3.4.2
+  - intel-openmp=2023.1.0
+  - libcxx=14.0.6
+  - libffi=3.4.4
   - libgfortran=5.0.0
-  - libgfortran5=12.2.0
-  - liblapack=3.9.0
-  - libnghttp2=1.46.0
-  - libopenblas=0.3.23
+  - libgfortran5=11.3.0
+  - libopenblas=0.3.21
   - libprotobuf=3.20.3
-  - libsqlite=3.42.0
-  - libssh2=1.10.0
-  - libthrift=0.15.0
   - libuv=1.44.2
-  - libzlib=1.2.13
-  - llvm-openmp=16.0.5
-  - lz4-c=1.9.4
-  - multidict=6.0.4
-  - multiprocess=0.70.14
+  - llvm-openmp=14.0.6
+  - mkl=2023.1.0
+  - mkl-service=2.4.0
+  - mkl_fft=1.3.6
+  - mkl_random=1.2.2
   - ncurses=6.4
-  - ninja=1.11.1
+  - ninja=1.10.2
+  - ninja-base=1.10.2
+  - nodeenv=1.8.0
   - numpy=1.24.3
+  - numpy-base=1.24.3
   - openssl=1.1.1u
-  - orc=1.7.4
-  - packaging=23.1
-  - pandas=2.0.2
-  - pip=23.1.2
-  - psutil=5.9.5
-  - pyarrow=11.0.0
+  - packaging=23.0
+  - pip=23.0.1
+  - platformdirs=2.6.2
+  - pre-commit=3.3.2
+  - psutil=5.9.0
   - pycparser=2.21
-  - pypy3.9=7.3.11
+  - pyopenssl=23.0.0
   - pysocks=1.7.1
   - python=3.9.16
-  - python-dateutil=2.8.2
-  - python-tzdata=2023.3
-  - python-xxhash=3.2.0
   - python_abi=3.9
   - pytorch=1.13.1
-  - pytz=2023.3
   - pyyaml=6.0
-  - re2=2022.04.01
   - readline=8.2
-  - regex=2023.6.3
-  - requests=2.31.0
-  - responses=0.18.0
-  - sacremoses=0.0.53
-  - setuptools=67.7.2
-  - six=1.16.0
-  - snappy=1.1.10
-  - sqlite=3.42.0
+  - regex=2022.7.9
+  - requests=2.29.0
+  - setuptools=67.8.0
+  - sqlite=3.41.2
+  - tbb=2021.8.0
   - tk=8.6.12
   - tokenizers=0.11.4
   - tqdm=4.65.0
-  - transformers=4.29.2
-  - typing-extensions=4.6.3
+  - transformers=4.24.0
+  - typing-extensions=4.5.0
+  - typing_extensions=4.5.0
   - tzdata=2023c
-  - urllib3=2.0.3
-  - utf8proc=2.6.1
-  - wheel=0.40.0
-  - xxhash=0.8.1
-  - xz=5.2.6
+  - ukkonen=1.0.1
+  - urllib3=1.26.16
+  - virtualenv=20.17.1
+  - wheel=0.38.4
+  - xz=5.4.2
   - yaml=0.2.5
-  - yarl=1.9.2
-  - zipp=3.15.0
   - zlib=1.2.13
-  - zstd=1.5.2
+  - pip:
+      - cachetools==5.3.1
+      - google-api-core==2.11.0
+      - google-auth==2.19.1
+      - google-cloud-aiplatform==1.26.0
+      - google-cloud-bigquery==3.11.0
+      - google-cloud-core==2.3.2
+      - google-cloud-resource-manager==1.10.1
+      - google-cloud-storage==2.9.0
+      - google-crc32c==1.5.0
+      - google-resumable-media==2.5.0
+      - googleapis-common-protos==1.59.0
+      - grpc-google-iam-v1==0.12.6
+      - grpcio==1.54.2
+      - grpcio-status==1.54.2
+      - proto-plus==1.22.2
+      - protobuf==4.23.2
+      - pyasn1==0.5.0
+      - pyasn1-modules==0.3.0
+      - python-dateutil==2.8.2
+      - rsa==4.9
+      - shapely==1.8.5.post1
+      - six==1.16.0
 prefix: /opt/miniconda3/envs/serving-llms

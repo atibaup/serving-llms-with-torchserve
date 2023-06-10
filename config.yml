@@ -5,7 +5,8 @@ deployment:
   accelerator_type: 'NVIDIA_TESLA_T4'
   accelerator_count: 1
   traffic_percentage: 100
+  service_account: 'vertexai@xyz.iam.gserviceaccount.com'
 
 aiplatform:
-  gcp_staging_bucket: 'gs://sylvan-epoch-389310-vertexai-staging'
-  sa_credentials: '/Users/atibaup/Documents/landbot/credentials/sylvan-epoch-389310-7cd30ec565e6.json'
+  gcp_staging_bucket: 'gs://xyz'
+  sa_credentials: '/path/to/service_account_credentials.json'

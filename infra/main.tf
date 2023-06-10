@@ -39,6 +39,12 @@ resource "google_project_service" "vertexai_service" {
   depends_on = [google_project_service.cloud_resource_manager]
 }
 
+resource "google_project_service" "container_registry" {
+  service = "containerregistry.googleapis.com"
+  disable_dependent_services = true
+  depends_on = [google_project_service.cloud_resource_manager]
+}
+
 resource "google_service_account" "vertexai_sa" {
   account_id   = "vertexai"
   display_name = "Service account for vertex AI "

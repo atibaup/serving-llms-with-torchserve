@@ -2,7 +2,7 @@ IMAGE_NAME := gcr.io/$(GCP_PROJECT)/$(APP)
 CPU_IMAGE_NAME := $(IMAGE_NAME)-cpu
 GPU_IMAGE_NAME := $(IMAGE_NAME)-gpu
 
-.PHONY: build-dev build-pro run stop test shell logs push
+.PHONY: build-dev build-pro run stop test-dev shell logs push deploy test
 
 build-dev: ## builds CPU-optimized docker image for local dev
 	docker build -t $(CPU_IMAGE_NAME) \
@@ -24,13 +24,13 @@ stop: ## stops docker container
 delete: ## deletes container
 	docker rm -f $(APP)
 
-test: ## tests that local model endpoint is running
+test-dev: ## tests that local model endpoint is running
 	curl http://localhost:7081/models/
 	curl -d '{"instances": ["How to prepare a spanish omelette:"]}' \
 		-H "Content-Type: application/json" \
 		-X POST http://localhost:7080/predictions/$(APP)
 
-test-prod: ## tests that vertexai model endpoint is running, needs ENDPOINT_ID
+test: ## tests that vertexai model endpoint is running, needs ENDPOINT_ID
 	curl \
         -X POST \
         -H "Authorization: Bearer $$(gcloud auth print-access-token)" \
@@ -47,10 +47,7 @@ logs: ## display local container logs
 push: ## push container to GCR registry
 	docker push $(GPU_IMAGE_NAME)
 
-infra: ## create infra in GCP
-	terraform apply infra/main.tf
-
-deploy-prod: ## Deploy to vertexai
+deploy: ## Deploy to vertexai. Requires providing APP and VERSION
 	python deploy_to_vertexai.py $(APP) $(VERSION) $(APP)-gpu
 
 .DEFAULT_GOAL := help
